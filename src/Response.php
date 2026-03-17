@@ -72,6 +72,12 @@ class Response
         }
     }
 
+    /**
+     * Set custom HTTP headers for the response.
+     * 
+     * @param array $headers An associative array of headers to set (e.g., ['X-Custom-Header' => 'Value'])
+     * @return self
+     */
     public function setHeaders(array $headers = []): self 
     {
         foreach ($headers as $key => $value) {
