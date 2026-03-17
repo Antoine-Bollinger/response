@@ -63,7 +63,7 @@ class Response
             "Access-Control-Allow-Headers" => "Content-Type, Authorization",
             "Access-Control-Allow-Credentials" => "true",
             "Content-type" => "application/json; charset=UTF-8"
-        ]);
+        ], false);
 
         echo $this->toJson();
 
@@ -74,16 +74,19 @@ class Response
 
     /**
      * Set custom HTTP headers for the response.
+     * Headers should be provided as an associative array where the key is the header name and the value is the header value.
+     * Example: ['X-Custom-Header' => 'CustomValue']    
      * 
      * @param array $headers An associative array of headers to set (e.g., ['X-Custom-Header' => 'Value'])
-     * @return self
+     * @return self|null Returns the instance for chaining if $returnThis is true, otherwise returns null
      */
-    public function setHeaders(array $headers = []): self 
+    public function setHeaders(array $headers = [], bool $returnThis = true): self|null
     {
         foreach ($headers as $key => $value) {
             header("$key: $value");
         }
-        return $this;
+
+        return $returnThis ? $this : null;
     }
 
     /**
