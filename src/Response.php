@@ -57,17 +57,27 @@ class Response
     {
         http_response_code($_SERVER['REQUEST_METHOD'] === 'OPTIONS' ? 200 : $this->getCode());
 
-        header("Access-Control-Allow-Origin: " . (defined('ALLOW_ORIGIN') ? ALLOW_ORIGIN : '*'));
-        header("Access-Control-Allow-Methods: " . (defined('ALLOW_METHODS') ? ALLOW_METHODS : 'GET, POST, OPTIONS'));
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
-        header("Access-Control-Allow-Credentials: true");
-        header("Content-type: application/json; charset=UTF-8");
+        $this->setHeaders([
+            "Access-Control-Allow-Origin" => (defined('ALLOW_ORIGIN') ? ALLOW_ORIGIN : '*'),
+            "Access-Control-Allow-Methods" => (defined('ALLOW_METHODS') ? ALLOW_METHODS : 'GET, POST, OPTIONS'),
+            "Access-Control-Allow-Headers" => "Content-Type, Authorization",
+            "Access-Control-Allow-Credentials" => "true",
+            "Content-type" => "application/json; charset=UTF-8"
+        ]);
 
         echo $this->toJson();
 
         if ($terminate) {
             exit;
         }
+    }
+
+    public function setHeaders(array $headers = []): self 
+    {
+        foreach ($headers as $key => $value) {
+            header("$key: $value");
+        }
+        return $this;
     }
 
     /**
