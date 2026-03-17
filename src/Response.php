@@ -57,13 +57,11 @@ class Response
     {
         http_response_code($_SERVER['REQUEST_METHOD'] === 'OPTIONS' ? 200 : $this->getCode());
 
-        $this->setHeaders([
-            "Access-Control-Allow-Origin" => (defined('ALLOW_ORIGIN') ? ALLOW_ORIGIN : '*'),
-            "Access-Control-Allow-Methods" => (defined('ALLOW_METHODS') ? ALLOW_METHODS : 'GET, POST, OPTIONS'),
-            "Access-Control-Allow-Headers" => "Content-Type, Authorization",
-            "Access-Control-Allow-Credentials" => "true",
-            "Content-type" => "application/json; charset=UTF-8"
-        ], false);
+        header("Access-Control-Allow-Origin: " . (defined('ALLOW_ORIGIN') ? ALLOW_ORIGIN : '*'));
+        header("Access-Control-Allow-Methods: " . (defined('ALLOW_METHODS') ? ALLOW_METHODS : 'GET, POST, OPTIONS'));
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
+        header("Access-Control-Allow-Credentials: true");
+        header("Content-Type: application/json; charset=UTF-8");
 
         echo $this->toJson();
 
@@ -78,17 +76,14 @@ class Response
      * Example: ['X-Custom-Header' => 'CustomValue']    
      * 
      * @param array $headers An associative array of headers to set (e.g., ['X-Custom-Header' => 'Value'])
-     * @return self|void Returns the instance for chaining if $returnThis is true, otherwise returns void
+     * @return self
      */
-    public function setHeaders(array $headers = [], bool $returnThis = true)
+    public function setHeaders(array $headers = []): self
     {
         foreach ($headers as $key => $value) {
             header("$key: $value");
         }
-
-        if ($returnThis) {
-            return $this;
-        }
+        return $this;
     }
 
     /**
