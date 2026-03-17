@@ -60,7 +60,7 @@ class Response
      * @param bool $terminate Whether to terminate the script after sending the response (default: true)
      * @return void
      */
-    public function sendJSON(array $headers = [], bool $terminate = true): void
+    public function sendJSON(bool $terminate = true): void
     {
         http_response_code($_SERVER['REQUEST_METHOD'] === 'OPTIONS' ? 200 : $this->getCode());
 
