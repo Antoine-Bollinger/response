@@ -28,6 +28,13 @@ class Response
     private array $default;
 
     /**
+     * The headers to include in the response.
+     * 
+     * @var array
+     */
+    private array $headers = [];
+
+    /**
      * Constructor for the Response class.
      *
      * Initializes the default response parameters and sets the initial response.
@@ -53,7 +60,7 @@ class Response
      * @param bool $terminate Whether to terminate the script after sending the response (default: true)
      * @return void
      */
-    public function sendJSON(bool $terminate = true): void
+    public function sendJSON(array $headers = [], bool $terminate = true): void
     {
         http_response_code($_SERVER['REQUEST_METHOD'] === 'OPTIONS' ? 200 : $this->getCode());
 
@@ -62,6 +69,10 @@ class Response
         header("Access-Control-Allow-Headers: Content-Type, Authorization");
         header("Access-Control-Allow-Credentials: true");
         header("Content-Type: application/json; charset=UTF-8");
+
+        foreach ($this->headers as $key => $value) {
+            header("$key: $value");
+        }
 
         echo $this->toJson();
 
@@ -80,9 +91,7 @@ class Response
      */
     public function setHeaders(array $headers = []): self
     {
-        foreach ($headers as $key => $value) {
-            header("$key: $value");
-        }
+        $this->headers = $headers;
         return $this;
     }
 
