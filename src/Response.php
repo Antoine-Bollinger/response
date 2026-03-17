@@ -78,15 +78,17 @@ class Response
      * Example: ['X-Custom-Header' => 'CustomValue']    
      * 
      * @param array $headers An associative array of headers to set (e.g., ['X-Custom-Header' => 'Value'])
-     * @return self|null Returns the instance for chaining if $returnThis is true, otherwise returns null
+     * @return self|void Returns the instance for chaining if $returnThis is true, otherwise returns void
      */
-    public function setHeaders(array $headers = [], bool $returnThis = true): self|null
+    public function setHeaders(array $headers = [], bool $returnThis = true)
     {
         foreach ($headers as $key => $value) {
             header("$key: $value");
         }
 
-        return $returnThis ? $this : null;
+        if ($returnThis) {
+            return $this;
+        }
     }
 
     /**
